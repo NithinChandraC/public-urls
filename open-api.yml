@@ -1,0 +1,48 @@
+openapi: 3.0.3 # version of the specification
+info:
+  version: '1'
+  title: Open API Generator Spring Boot Example
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /parents:
+    get:
+      summary: return parents information
+      operationId: getParents
+      responses:
+        200:
+          description: General parents information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParentResponse'
+
+components:
+  schemas:
+    ParentResponse:
+      discriminator:
+        propertyName: ParentResponseType
+        mapping:
+          Parent: '#/components/schemas/Parent'
+      type: object
+      properties:
+        status:
+          type: string
+        errorMessage:
+          type: string
+      description: Response of the parent.
+
+    Parent:
+      allOf:
+        - $ref: '#/components/schemas/ParentResponse'
+        - type: object
+          properties:
+            parentId:
+              type: integer
+              description: The ID of the parent
+              format: int64
+            parentName:
+              type: string
+              example: 'Stephen'
